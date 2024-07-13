@@ -9,9 +9,9 @@ Future versions will include support for mouse clicks and include an autoclick f
 Create a ticket on our Discord Server (https://discord.gg/te6JSdRF7C)
 
 ## Files
-- `Multi_Instance_Roblox_Handler_v1/Multi_Instance_Roblox_Handler_v1.ahk`: The main AutoHotkey script.
-- `Multi_Instance_Roblox_Handler_v1/littlejbirdielogo.png`: The image used by the script.
-- `Multi_Instance_Roblox_Handler_v1/keystrokes.ini`: Configuration settings for the script.
+- `Multi_Instance_Roblox_Handler_v1.ahk`: The main AutoHotkey script.
+- `littlejbirdielogo.png`: The image used by the script.
+- `keystrokes.ini`: Configuration settings for the script.
 
 ## Usage
 1. Install [AutoHotkey](https://www.autohotkey.com/). Version 2 is required. 
