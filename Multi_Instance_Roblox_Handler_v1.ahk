@@ -1,4 +1,3 @@
-;Multiple Instance Roblox Hander v1 from LittleJBirdie
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 CoordMode("Pixel", "Client") ; Use client coordinates for window-specific operations
@@ -136,6 +135,10 @@ ShowSequences(*) {
     MsgBox(sequenceList)
 }
 
+KeySyntax(*) {
+    Run "https://www.autohotkey.com/docs/v2/lib/Send.htm"
+    }    
+
 ChooseSequence(gui2, instanceNum, *) {
     global sequencesMap, specialInstances, instanceSequenceNames, instanceInputComplete, defaultSequence
     gui2.Submit()
@@ -150,8 +153,11 @@ ChooseSequence(gui2, instanceNum, *) {
     if (ChosenSequence == "New Sequence") {
         ; Prompt for new key sequence
         gui3 := Gui()
+	gui3.Opt("+AlwaysOnTop")
         gui3.Add("Text", , "Enter key presses for Instance " instanceNum " `n(comma-separated):").SetFont("Bold")
         gui3.Add("Text",,"Modifiers: Ctrl=^, Alt=!, Shift=+`n Enclose Key Names in {} `n Examples:`n  -{Space down},{Space up}`n  -{Left down},^h,{Left up}`n  -h,e,l,l,o")
+	gui3.Add("Button",,"Syntax Help").OnEvent("Click", KeySyntax)
+	gui3.Add("Text","x+m","opens in new window")
         gui3.Add("Text", , "Enter key presses for Instance " instanceNum ":")
         gui3.Add("Edit", "vKeyPresses")
         gui3.Add("Text", , "Enter a nickname for this key sequence:")
@@ -295,4 +301,5 @@ ArrayToString(array) {
 
 F8::ExitApp()
 F12::Pause -1
+
 
