@@ -1,3 +1,4 @@
+;Multiple Instance Roblox Hander v1 from LittleJBirdie
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 CoordMode("Pixel", "Client") ; Use client coordinates for window-specific operations
@@ -21,6 +22,7 @@ global idList
 global defaultSequence := "{Space down},{Space up}"
 global gui3
 global guiStatus
+global logoFilePath := A_ScriptDir "\LittleJBirdieLogo.png" ; Define the path to the logo
 
 ; Ensure INI file exists
 if !FileExist(iniFilePath) {
@@ -34,21 +36,21 @@ LoadSequences()
 gui1 := Gui()
 gui1.Opt("+AlwaysOnTop")
 gui1.Add("Text",,"Instructions for use with AutoHotKey v2          ").SetFont("bold","s15 w200") 
-gui1.Add("Picture","w100 h-1","LittleJBirdieLogo.png")
+gui1.Add("Picture","w100 h-1", logoFilePath) ; Use the full path to the image
 gui1.Add("Text",,"By Little J Birdie").SetFont("s8 w50")
-gui1.Add("Button",,"Donate").OnEvent("Click",Donate)
+gui1.Add("Button",,"Donate").OnEvent("Click", Donate)
 gui1.Add("Link",,'Visit my <a href="https://www.youtube.com/@littlejbirdie">YouTube Channel</a>`nor Join my <a href="https://discord.gg/te6JSdRF7C">Discord Server</a>')
 gui1.Add("Text",,"Instructions:  ").SetFont("Bold")
 gui1.Add("Link",,'1. Open all <a href="https://github.com/ic3w0lf22/Roblox-Account-Manager">instances of Roblox</a> and position characters as needed.`n2. Press the START button to start the script.`n3. Follow the prompts to assign key sequences to each instance')
 gui1.Add("Text",,"Hotkeys:  ").SetFont("Bold")
-gui1.Add("Text",,"-F8: Exit script`n- F12: Pause/Resume script")
+gui1.Add("Text",,"-F8: Exit script`n-F12: Pause/Resume script")
 gui1.AddButton("Default w80","Start").OnEvent("Click", StartScript)
 gui1.Title := "Multi Instance Roblox Handler v1"
 gui1.Show("w410 h400")
 
-Donate(*){
-	Run "https://www.paypal.com/ncp/payment/8QW9PKMS4PNTQ"
-	}
+Donate(*) {
+    Run "https://www.paypal.com/ncp/payment/8QW9PKMS4PNTQ"
+}
 
 StartScript(*) {
     global idList, instanceSequenceNames, specialInstances, instanceIDs, cycleCount, minKeyPressInterval, timeInterval, iniFilePath, defaultSequence, gui1, timeInputComplete
@@ -228,19 +230,23 @@ ShowStatusGUI(x, y) {
     global guiStatus, cycleCount
     guiStatus := Gui()
     guiStatus.Opt("+AlwaysOnTop")
-    guiStatus.Add("Text",,"Multi Instance Roblox Handler v1")
-    guiStatus.Add("Text",,   "Script Running")
     guiStatus.Add("Text",,"Hotkeys: `n-F8: Exit script`n-F12: Pause/Resume script")
     guiStatus.Add("Text", "vCycleCount", "Cycles Completed: 0")
     guiStatus.Add("Link",,'Visit Little J Birdie <a href="https://www.youtube.com/@littlejbirdie">on Youtube</a> `nor Join my <a href="https://discord.gg/te6JSdRF7C">Discord Server</a>')
-    guiStatus.Title := "Status"
-    guiStatus.Show("w200 h200")
+    guiStatus.Title := "Cycle Count"
+    guiStatus.Show("w200 h150 x" x " y" y)
 }
 
 MainLoop() {
     global idList, specialInstances, minKeyPressInterval, timeInterval, cycleCount, guiStatus
     ; Main loop for executing key presses
     Loop {
+        if A_IsPaused {
+            guiStatus["CycleCount"].Text := "Cycles Completed: " cycleCount
+            Sleep 100
+            continue
+        }
+        
         Loop idList.Length {
             instanceNum := A_Index
             thisID := idList[instanceNum]
@@ -288,4 +294,5 @@ ArrayToString(array) {
 }
 
 F8::ExitApp()
-F12::Pause()
+F12::Pause -1
+
