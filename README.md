@@ -20,3 +20,6 @@ Create a ticket on our Discord Server (https://discord.gg/te6JSdRF7C)
 4. Launch Mult Instance Roblox Handler.
 5. Press the Start button when you are ready to choose keystroke sequences.
 6. Follow the on-screen prompts.
+
+## Reference
+See the AutoHotkey v2 Documentation for specific information about the syntax for entering your sequences https://www.autohotkey.com/docs/v2/lib/Send.htm 
