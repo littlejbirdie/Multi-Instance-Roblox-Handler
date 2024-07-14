@@ -22,4 +22,5 @@ Create a ticket on our Discord Server (https://discord.gg/te6JSdRF7C)
 6. Follow the on-screen prompts.
 
 ## Reference
-See the AutoHotkey v2 Documentation for specific information about the syntax for entering your sequences https://www.autohotkey.com/docs/v2/lib/Send.htm 
+See the AutoHotkey v2 Documentation for specific information about the syntax for entering your sequences ("https://www.autohotkey.com/docs/v2/lib/Send.htm") 
+Watch my youtube video to see how it works and how to customize it ("https://youtu.be/Gptn6WB1LEQ")
