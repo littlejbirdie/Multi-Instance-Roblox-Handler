@@ -48,7 +48,7 @@ gui1.Title := "Multi Instance Roblox Handler v1"
 gui1.Show("w410 h400")
 
 Donate(*) {
-    Run "https://www.paypal.com/ncp/payment/8QW9PKMS4PNTQ"
+    Run("https://www.paypal.com/ncp/payment/8QW9PKMS4PNTQ")
 }
 
 StartScript(*) {
@@ -68,7 +68,7 @@ StartScript(*) {
         ; Activate instance
         thisID := idList[instanceNum]
         WinActivate(thisID)
-        Sleep 200
+        Sleep(200)
         
         ; Sequentially prompt for user input
         PromptForKeySequences(instanceNum)
@@ -89,7 +89,7 @@ StartScript(*) {
     ; Wait for user input to complete before proceeding
     timeInputComplete := false
     while (!timeInputComplete) {
-        Sleep 100
+        Sleep(100)
     }
 
     ; Show the running status GUI at a specified position
@@ -122,7 +122,7 @@ PromptForKeySequences(instanceNum) {
     ; Wait for user input to complete before proceeding
     instanceInputComplete := false
     while (!instanceInputComplete) {
-        Sleep 100
+        Sleep(100)
     }
 }
 
@@ -136,8 +136,8 @@ ShowSequences(*) {
 }
 
 KeySyntax(*) {
-    Run "https://www.autohotkey.com/docs/v2/lib/Send.htm"
-    }    
+    Run("https://www.autohotkey.com/docs/v2/lib/Send.htm")
+}    
 
 ChooseSequence(gui2, instanceNum, *) {
     global sequencesMap, specialInstances, instanceSequenceNames, instanceInputComplete, defaultSequence
@@ -153,15 +153,15 @@ ChooseSequence(gui2, instanceNum, *) {
     if (ChosenSequence == "New Sequence") {
         ; Prompt for new key sequence
         gui3 := Gui()
-	gui3.Opt("+AlwaysOnTop")
+        gui3.Opt("+AlwaysOnTop")
         gui3.Add("Text", , "Enter key presses for Instance " instanceNum " `n(comma-separated):").SetFont("Bold")
         gui3.Add("Text",,"Modifiers: Ctrl=^, Alt=!, Shift=+`n Enclose Key Names in {} `n Examples:`n  -{Space down},{Space up}`n  -{Left down},^h,{Left up}`n  -h,e,l,l,o")
-	gui3.Add("Button",,"Syntax Help").OnEvent("Click", KeySyntax)
-	gui3.Add("Text","x+m","opens in new window")
+        gui3.Add("Button",,"Syntax Help").OnEvent("Click", KeySyntax)
+        gui3.Add("Text","x+m","opens in new window")
         gui3.Add("Text", , "Enter key presses for Instance " instanceNum ":")
-        gui3.Add("Edit", "vKeyPresses")
+        gui3.Add("Edit", "vKeyPresses w200 h40") ; Increased size for better visibility
         gui3.Add("Text", , "Enter a nickname for this key sequence:")
-        gui3.Add("Edit", "vSequenceNickname")
+        gui3.Add("Edit", "vSequenceNickname w200 h20") ; Increased size for better visibility
         gui3.Add("Button", , "Save").OnEvent("Click", SaveNewSequence.Bind(gui3, instanceNum))
         gui3.Title := "New Key Sequence"
         gui3.Show("w400 h300")
@@ -237,10 +237,10 @@ ShowStatusGUI(x, y) {
     guiStatus := Gui()
     guiStatus.Opt("+AlwaysOnTop")
     guiStatus.Add("Text",,"Hotkeys: `n-F8: Exit script`n-F12: Pause/Resume script")
-    guiStatus.Add("Text", "vCycleCount", "Cycles Completed: 0")
+    guiStatus.Add("Text", "vCycleCount", "Cycles Completed: 0000000").Opt("Wrap") ; Ensure text wraps if too long - Idea from JSLover https://www.autohotkey.com/board/topic/86024-fixed-gui-doesnt-show-double-digits/
     guiStatus.Add("Link",,'Visit Little J Birdie <a href="https://www.youtube.com/@littlejbirdie">on Youtube</a> `nor Join my <a href="https://discord.gg/te6JSdRF7C">Discord Server</a>')
     guiStatus.Title := "Cycle Count"
-    guiStatus.Show("w200 h150 x" x " y" y)
+    guiStatus.Show("w250 h120 x" x " y" y) ; Increased size for better visibility
 }
 
 MainLoop() {
@@ -248,8 +248,8 @@ MainLoop() {
     ; Main loop for executing key presses
     Loop {
         if A_IsPaused {
-            guiStatus["CycleCount"].Text := "Cycles Completed: " cycleCount
-            Sleep 100
+            guiStatus["CycleCount"].Text := "Cycles Completed: " TruncateLeadingZeros(Format("{:07}", cycleCount))
+            Sleep(100)
             continue
         }
         
@@ -264,7 +264,7 @@ MainLoop() {
             }
             
             WinActivate(thisID)
-            Sleep 200
+            Sleep(200)
             
             ; Perform special key presses for this instance
             for key in specialInstances[instanceNum] {
@@ -274,7 +274,7 @@ MainLoop() {
                 } else {
                     SendInput(key)
                 }
-                Sleep minKeyPressInterval
+                Sleep(minKeyPressInterval)
             }
             
             requiredTime := minKeyPressInterval * (specialInstances[instanceNum].Length + 1)
@@ -282,11 +282,11 @@ MainLoop() {
                 timeInterval := requiredTime
             }
             
-            Sleep timeInterval
+            Sleep(timeInterval)
         }
         cycleCount++
-        guiStatus["CycleCount"].Text := "Cycles Completed: " cycleCount
-        Sleep 1000
+        guiStatus["CycleCount"].Text := "Cycles Completed: " TruncateLeadingZeros(Format("{:07}", cycleCount))
+        Sleep(1000)
     }
     return
 }
@@ -299,7 +299,9 @@ ArrayToString(array) {
     return SubStr(str, 1, -2) ; Remove the trailing comma and space
 }
 
+TruncateLeadingZeros(number) {
+    return RegExReplace(number, "^0+", "")  ; Remove leading zeros
+}
+
 F8::ExitApp()
 F12::Pause -1
-
-
